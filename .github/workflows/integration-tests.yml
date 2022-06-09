@@ -101,18 +101,6 @@ jobs:
         with:
           name: Windows
           path: _release
-      - shell: bash
-        name: Hash and sign assets
-        env:
-          RELEASE_SIGNING_KEY: ${{ secrets.RELEASE_SIGNING_KEY }}
-        run: |
-          set -e
-          echo "$RELEASE_SIGNING_KEY"|gpg --import
-          cd _release
-          for asset in *; do
-            shasum -a 256 "$asset" >"$asset.sha256"
-            gpg --digest-algo=sha512 --detach-sig --armor -u 0x575159689BEFB442 "$asset"
-          done
       - name: Set Github ref variables
         id: github_ref_vars
         run: |
